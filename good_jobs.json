@@ -4,11 +4,5 @@
     "company": "Acme",
     "salary": 60000,
     "remote": true
-  },
-  {
-    "title": "Backend Developer",
-    "company": "Gamma",
-    "salary": 52000,
-    "remote": false
   }
 ]

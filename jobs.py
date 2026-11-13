@@ -13,7 +13,15 @@ def filter_by_salary(jobs: list[dict], minimum: int) -> list[dict]:
             result.append(job)
     return result
 
+def filter_remote(jobs: list[dict]) -> list[dict]:
+    result = []
+    for job in jobs:
+        if job["remote"] == True:
+            result.append(job)
+    return result
+
 good_jobs = filter_by_salary(jobs, 50000)
+good_jobs = filter_remote(good_jobs)
 
 with open("good_jobs.json", "w") as file:
     json.dump(good_jobs, file, indent=2)
