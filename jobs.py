@@ -23,9 +23,7 @@ def filter_remote(jobs: list[dict]) -> list[dict]:
 good_jobs = filter_by_salary(jobs, 50000)
 good_jobs = filter_remote(good_jobs)
 
-""" # 1. Yours: reuse the variable, one step per line
-good_jobs = filter_by_salary(jobs, 50000)
-good_jobs = filter_remote(good_jobs)
+""" # Other options of chain calling functions:
 
 # 2. Separate names, so each step stays inspectable
 well_paid = filter_by_salary(jobs, 50000)
