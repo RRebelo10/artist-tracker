@@ -4,7 +4,7 @@ from pathlib import Path
 SEEN_FILE = Path("seen_events.json")
 
 def load_seen() -> set[str]:
-    if not SEEN_FILE.exists():
+    if not SEEN_FILE.exists() or SEEN_FILE.stat().st_size == 0:
         return set()
     with open(SEEN_FILE, encoding="utf-8") as f:
         return set(json.load(f))
