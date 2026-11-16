@@ -3,9 +3,8 @@
   "artists": [
     {"name": "Rosalía", "type": "music", "locations": ["Portugal", "Madrid"]},
     {"name": "The Pretty Reckless", "type": "music"},
-    {"name": "Bad Bunny", "type": "music"},
-    {"name": "Carlos Contente", "type": "comedian"},
-    {"name": "Carlos Coutinho Vilhena", "type": "comedian"},
-    {"name": "Bruno Nogueira", "type": "comedian"}
+    {"name": "João Baião", "type": "actor"},
+    {"name": "António Zambujo", "type": "music"},
+    {"name": "Carlos Coutinho Vilhena", "type": "comedian"}
   ]
 }
