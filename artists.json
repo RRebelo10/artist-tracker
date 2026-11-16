@@ -1,0 +1,10 @@
+{
+  "default_locations": ["Lisboa", "Cartaxo"],
+  "artists": [
+    {"name": "Rosalía", "type": "music", "locations": ["Portugal", "Madrid"]},
+    {"name": "The Pretty Reckless", "type": "music"},
+    {"name": "Bad Bunny", "type": "music"},
+    {"name": "Carlos Contente", "type": "comedian"},
+    {"name": "Carlos Coutinho Vilhena", "type": "comedian"}
+  ]
+}
