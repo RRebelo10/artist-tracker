@@ -6,6 +6,7 @@ from google.genai import types
 from watchlist import load_watchlist
 from search_tool import search_web
 from extract_event import Event
+from seen import load_seen, save_seen, make_key
 
 load_dotenv()
 client = genai.Client()
@@ -39,6 +40,9 @@ def extract_events(text: str) -> list[Event]:
 if __name__ == "__main__":
     data = load_watchlist()
     today = date.today().isoformat()
+    seen = load_seen()
+    new_events = []
+
     for artist in data["artists"]:
         locations = artist.get("locations", data["default_locations"])
         print(f"\n== {artist['name']} ==")
@@ -49,7 +53,17 @@ if __name__ == "__main__":
             print(f"Skipped ({type(e).__name__}): {e}")
             time.sleep(60)
             continue
+
         for event in events:
-            if event.date is None or event.date >= today:
-                print(event)
+            if event.date is not None and event.date < today:
+                continue
+            key = make_key(artist["name"], event)
+            if key in seen:
+                continue
+            seen.add(key)
+            new_events.append(event)
+            print("NEW:", event)
         time.sleep(10)
+
+    save_seen(seen)
+    print(f"\n{len(new_events)} new events")

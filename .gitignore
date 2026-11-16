@@ -11,3 +11,6 @@ wheels/
 
 # Environment variables
 .env
+
+# Private data
+seen_events.json
