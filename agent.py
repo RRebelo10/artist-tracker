@@ -1,0 +1,55 @@
+import time
+from dotenv import load_dotenv
+from datetime import date
+from google import genai
+from google.genai import types
+from watchlist import load_watchlist
+from search_tool import search_web
+from extract_event import Event
+
+load_dotenv()
+client = genai.Client()
+MODEL = "gemini-3.5-flash-lite"
+
+def find_events(artist: dict, locations: list[str]) -> str:
+    prompt = (
+        f"Today is {date.today()}. Find upcoming events by {artist['name']} "
+        f"({artist['type']}) in: {', '.join(locations)}. "
+        "Use the search tool. Only include events after today. "
+        "Reply with a short plain list."
+    )
+    response = client.models.generate_content(
+        model=MODEL,
+        contents=prompt,
+        config=types.GenerateContentConfig(tools=[search_web]),
+    )
+    return response.text
+
+def extract_events(text: str) -> list[Event]:
+    response = client.models.generate_content(
+        model=MODEL,
+        contents=f"Extract every event from this text. If there are none, return an empty list:\n\n{text}",
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": list[Event],
+        },
+    )
+    return response.parsed
+
+if __name__ == "__main__":
+    data = load_watchlist()
+    today = date.today().isoformat()
+    for artist in data["artists"]:
+        locations = artist.get("locations", data["default_locations"])
+        print(f"\n== {artist['name']} ==")
+        try:
+            text = find_events(artist, locations)
+            events = extract_events(text)
+        except Exception as e:
+            print(f"Skipped ({type(e).__name__}): {e}")
+            time.sleep(60)
+            continue
+        for event in events:
+            if event.date is None or event.date >= today:
+                print(event)
+        time.sleep(10)
