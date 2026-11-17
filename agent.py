@@ -7,6 +7,7 @@ from watchlist import load_watchlist
 from search_tool import search_web
 from extract_event import Event
 from seen import load_seen, save_seen, make_key
+from notify import send_email, format_events
 
 load_dotenv()
 client = genai.Client()
@@ -26,10 +27,16 @@ def find_events(artist: dict, locations: list[str]) -> str:
     )
     return response.text
 
-def extract_events(text: str) -> list[Event]:
+def extract_events(text: str, artist_name: str) -> list[Event]:
     response = client.models.generate_content(
         model=MODEL,
-        contents=f"Extract every event from this text. If there are none, return an empty list:\n\n{text}",
+        contents=(
+            f"Extract every event for {artist_name} from this text. "
+            "The artist field is the performer's name; the title field is the "
+            "name of the play, show or tour. "
+            "If there are none, return an empty list:\n\n"
+            f"{text}"
+        ),
         config={
             "response_mime_type": "application/json",
             "response_schema": list[Event],
@@ -48,7 +55,7 @@ if __name__ == "__main__":
         print(f"\n== {artist['name']} ==")
         try:
             text = find_events(artist, locations)
-            events = extract_events(text)
+            events = extract_events(text, artist["name"])
         except Exception as e:
             print(f"Skipped ({type(e).__name__}): {e}")
             time.sleep(60)
@@ -65,5 +72,7 @@ if __name__ == "__main__":
             print("NEW:", event)
         time.sleep(10)
 
-    save_seen(seen)
+    if new_events:
+        send_email(f"{len(new_events)} new events", format_events(new_events))
+        save_seen(seen)
     print(f"\n{len(new_events)} new events")

@@ -6,10 +6,11 @@ load_dotenv()
 client = genai.Client()
 
 class Event(BaseModel):
-    artist: str
+    artist: str = Field(description="Name of the performer, never the show title")
+    title: str | None = Field(description="Name of the play, show or tour, if any")
     date: str | None = Field(description="Format YYYY-MM-DD")
-    city: str | None
-    venue: str | None
+    city: str | None = Field(description="City where the event will take place")
+    venue: str | None = Field(description="Venue where the event will take place")
 
 def extract_event(text: str) -> Event:
     response = client.models.generate_content(
