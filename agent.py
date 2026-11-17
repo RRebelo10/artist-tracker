@@ -44,6 +44,16 @@ def extract_events(text: str, artist_name: str) -> list[Event]:
     )
     return response.parsed
 
+def with_retry(fn, *args, tries=3, wait=60):
+    for attempt in range(1, tries + 1):
+        try:
+            return fn(*args)
+        except Exception as e:
+            print(f"Attempt {attempt} failed ({type(e).__name__}): {e}")
+            if attempt == tries:
+                raise
+            time.sleep(wait)
+
 if __name__ == "__main__":
     data = load_watchlist()
     today = date.today().isoformat()
@@ -54,11 +64,10 @@ if __name__ == "__main__":
         locations = artist.get("locations", data["default_locations"])
         print(f"\n== {artist['name']} ==")
         try:
-            text = find_events(artist, locations)
-            events = extract_events(text, artist["name"])
-        except Exception as e:
-            print(f"Skipped ({type(e).__name__}): {e}")
-            time.sleep(60)
+            text = with_retry(find_events, artist, locations)
+            events = with_retry(extract_events, text, artist["name"])
+        except Exception:
+            print("Giving up on this artist for this run")
             continue
 
         for event in events:
