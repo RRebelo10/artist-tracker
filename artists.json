@@ -3,8 +3,10 @@
   "artists": [
     {"name": "Rosalía", "type": "music", "locations": ["Portugal", "Madrid"]},
     {"name": "The Pretty Reckless", "type": "music"},
-    {"name": "João Baião", "type": "actor"},
-    {"name": "António Zambujo", "type": "music"},
-    {"name": "Carlos Coutinho Vilhena", "type": "comedian"}
+    {"name": "Gorillaz", "type": "music"},
+    {"name": "Carlos Contente", "type": "comedian", "locations": ["Lisboa", "Cartaxo", "Manteigas"]},
+    {"name": "Carlos Coutinho Vilhena", "type": "comedian", "locations": ["Lisboa", "Cartaxo", "Manteigas"]},
+    {"name": "João Pedro Pereira", "type": "comedian", "locations": ["Lisboa", "Cartaxo", "Manteigas"]},
+    {"name": "Freakshow Labs", "type": "comedian", "locations": ["Lisboa", "Cartaxo", "Manteigas"]}
   ]
 }
